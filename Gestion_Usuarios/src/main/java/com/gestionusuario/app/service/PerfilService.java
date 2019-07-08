@@ -38,5 +38,6 @@ public interface PerfilService extends GenericService<Perfil> {
 	
 	public Perfil findPerfilByAD(Dominio dominio, String usuario, String password) throws ClientProtocolException, IOException, JSONException;
 	
+	public String findPermisosPorPerfilId(Long perfilId);
 
 }

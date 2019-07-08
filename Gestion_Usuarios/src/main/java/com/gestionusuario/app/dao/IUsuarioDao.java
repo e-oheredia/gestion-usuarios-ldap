@@ -10,4 +10,6 @@ public interface IUsuarioDao extends CrudRepository<Usuario, Long>{
 	@Query("SELECT CONCAT(u.nombre,' ',u.apellido) FROM Usuario u WHERE u.idUsuario=?1")
 	public String findNombreUsuario(Long idUsuario);
 	
+	public Usuario findByMatricula(String matricula);
+	
 }
