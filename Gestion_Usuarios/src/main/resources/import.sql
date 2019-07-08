@@ -77,6 +77,13 @@ insert into usuario_perfil values (1,GETDATE(),'',7,11)
 insert into usuario_perfil values (1,GETDATE(),'',7,12)
 
 
-insert into tipo_autenticacion (nombre, descripcion) values ('AUTENTICACION BASICA','INGRESO CON USUARIO Y CONTRASEÑA')
 
 
+INSERT [dbo].[dominio] ([nombre], [url], [base_dn],[manager_username],[manager_password], [filter_pattern], [activo]) VALUES ('EXACT','ldap://localhost:8389','dc=springframework,dc=org','','','uid=%s',1)
+
+INSERT [dbo].[tipo_autenticacion] ([nombre], [descripcion]) VALUES ('AUTENTICACION BASICA','INGRESO CON USUARIO Y CONTRASEÑA')
+INSERT [dbo].[tipo_autenticacion] ([nombre], [descripcion]) VALUES ('ACTIVE DIRECTORY', 'INGRESO CON DOMINIO')
+
+INSERT [dbo].[grupo_red] ([nombre],[perfil_id]) VALUES ('AGENTE DE SEGURIDAD',5)
+INSERT [dbo].[grupo_red] ([nombre],[perfil_id]) VALUES ('AGENCIA LIMA',5)
+INSERT [dbo].[grupo_red] ([nombre],[perfil_id]) VALUES ('SUPERVISOR LIMA',3)

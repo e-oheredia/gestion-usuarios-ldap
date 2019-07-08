@@ -3,6 +3,7 @@ package com.gestionusuario.app.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,8 @@ import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 
@@ -54,13 +57,20 @@ public class Sesion implements Serializable {
 	private Long idSesion;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat
+	(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="America/Lima")
 	private Date inisesion;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat
+	(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="America/Lima")
 	private Date finsesion;
 	
-	@ManyToOne
-	private Usuario usesion;	
+	@Column(name="matricula_usuario")
+	private String matriculaUsuario;
+	
+//	@ManyToOne
+//	private Usuario usesion;	
 	
 	@ManyToOne
 	private Tipo_Autenticacion autsesion;
@@ -90,13 +100,13 @@ public class Sesion implements Serializable {
 		this.finsesion = finsesion;
 	}
 
-	public Usuario getUsesion() {
-		return usesion;
-	}
-
-	public void setUsesion(Usuario usesion) {
-		this.usesion = usesion;
-	}
+//	public Usuario getUsesion() {
+//		return usesion;
+//	}
+//
+//	public void setUsesion(Usuario usesion) {
+//		this.usesion = usesion;
+//	}
 
 	public Tipo_Autenticacion getAutsesion() {
 		return autsesion;
@@ -104,6 +114,14 @@ public class Sesion implements Serializable {
 
 	public void setAutsesion(Tipo_Autenticacion autsesion) {
 		this.autsesion = autsesion;
+	}
+
+	public String getMatriculaUsuario() {
+		return matriculaUsuario;
+	}
+
+	public void setMatriculaUsuario(String matriculaUsuario) {
+		this.matriculaUsuario = matriculaUsuario;
 	}
 
 	

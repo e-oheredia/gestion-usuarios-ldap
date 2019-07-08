@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gestionusuario.app.edao.GrupoRedEdao;
 import com.gestionusuario.app.entity.Usuario;
 import com.gestionusuario.app.service.PerfilService;
 import com.gestionusuario.app.service.PermisoService;
@@ -39,6 +40,8 @@ public class JwtTokenUtil implements Serializable{
 	
 	@Autowired
 	private PerfilService perfilservice;
+	
+	
 	
 	public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -78,8 +81,8 @@ public class JwtTokenUtil implements Serializable{
     }
 
     //llama a generar Token
-    public String generateToken(Usuario usuario, int idsession) throws Exception {
-        return tokenacceso(usuario,idsession);
+    public String generateToken(Map<String,Object> empleado, Long idsession) throws Exception {
+        return tokenacceso(empleado,idsession);
     }
     
     //crea el token refresh
@@ -94,9 +97,9 @@ public class JwtTokenUtil implements Serializable{
     
     
     // Crea el token de acceso en el login 
-    private String tokenacceso(Usuario usuario, int idsession) throws Exception {
+    private String tokenacceso(Map<String,Object> empleado, Long idsession) throws Exception {
     	
-    	String permisosID = permisoservice.ObtenerPermisosID(usuario.getIdUsuario());
+    	String permisosID = perfilservice.findPermisosPorPerfilId(Long.valueOf(empleado.get("idPerfil").toString()));
     	List<Map<String, Object>> permisosNombre = new ArrayList<Map<String, Object>>();
         String[] permisosIDarray = permisosID.split(",");
         int[] intpermisosID = new int[permisosIDarray.length];
@@ -112,13 +115,13 @@ public class JwtTokenUtil implements Serializable{
         	permisosNombre.add(nombrePermiso);
         }
         String jsonPermisos = new ObjectMapper().writeValueAsString(permisosNombre);
-        Claims claims = Jwts.claims().setSubject(String.valueOf(usuario.getIdUsuario()));
-        claims.put("idperfil", perfilservice.ObtenerPerfilID(usuario.getIdUsuario()));
-        claims.put("perfil", perfilservice.ObtenerPerfil(usuario.getIdUsuario()));
+        Claims claims = Jwts.claims().setSubject(String.valueOf(empleado.get("id")));
+        claims.put("idperfil", empleado.get("idPerfil")); //CAMBIA
+        claims.put("perfil", empleado.get("perfil").toString()); //CAMBIA
         claims.put("permisos", jsonPermisos);
-        claims.put("matricula", usuario.getMatricula());
-        claims.put("idUsuario", usuario.getIdUsuario());
-        claims.put("usuario", usuario.getNombre());
+        claims.put("matricula", empleado.get("matricula").toString());// REEMPLAZAR CON EL FRONT usuario.getMatricula x matricula 
+        claims.put("idUsuario", empleado.get("nombres").toString());
+        claims.put("usuario", empleado.get("id"));
         claims.put("idSesion", idsession);
         
         return Jwts.builder()

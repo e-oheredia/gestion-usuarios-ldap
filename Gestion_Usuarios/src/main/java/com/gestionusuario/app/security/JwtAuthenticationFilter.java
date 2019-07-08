@@ -47,6 +47,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		String password = null;
 		String[] part;
 		
+		String path = ((HttpServletRequest) req).getServletPath();
+		
+		if (path.contains("dominios")) {
+			chain.doFilter(req, res);
+			return;
+		}
 		
 		if (header != null && header.startsWith(AUTHENTICATION_PREFIX)) {
 

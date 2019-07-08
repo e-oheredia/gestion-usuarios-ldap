@@ -216,4 +216,11 @@ public class PerfilServiceImpl implements PerfilService{
 		}
 	    return null;
  	}
+
+	@Override
+	public String findPermisosPorPerfilId(Long perfilId) {
+		return iPerfilDao.findPermisosByPerfilId(perfilId);
+	}
+	
+	
 }
