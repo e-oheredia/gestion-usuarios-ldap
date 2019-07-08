@@ -121,10 +121,10 @@ public class LoginController {
 		// AGREGAR A SERVICIO CREARSESION
 		Dominio dominioBD = dominioDao.findById(dominio.getDominioId()).orElse(null);
 		Iterable<Map<String,Object>> grupos = grupoRedEdao.listarGruposAD(dominioBD.getUrl(), dominioBD.getBaseDn(), null, null, "uid="+nombrelista[0], part[1]);
-		if(grupos==null) {
-			response.setStatus(401);
-			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-		}
+//		if(grupos==null) {
+//			response.setStatus(401);
+//			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//		}
 		Perfil perfilEncontrado = new Perfil();
 		for(Map<String,Object> grupo : grupos) {
 			int i=0;
