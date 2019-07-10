@@ -43,6 +43,7 @@ import com.gestionusuario.app.entity.Usuario;
 import com.gestionusuario.app.security.Decoder;
 import com.gestionusuario.app.security.JwtTokenUtil;
 import com.gestionusuario.app.service.LoginUsuarioService;
+import com.gestionusuario.app.service.PerfilService;
 import com.gestionusuario.app.service.SesionService;
 
 import static com.gestionusuario.app.enumerator.TipoAutenticacionEnum.ACTIVE_DIRECTORY;
@@ -55,7 +56,7 @@ import static com.gestionusuario.app.enumerator.Identificadores.AUTHENTICATION_P
 @RequestMapping("/login")
 public class LoginController {
 
-	public int UsuarioActual;
+	public Long sesionActual;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -90,6 +91,9 @@ public class LoginController {
 	@Autowired
 	private IDominioDao dominioDao;
 	
+	@Autowired
+	private PerfilService perfilservice;
+	
 	//@RequestMapping(value = "/token", method = RequestMethod.POST)
 	@PostMapping("/token/{tipoAut}")
 	public ResponseEntity<?> register(HttpServletRequest header,  HttpServletResponse response,@RequestBody(required=false) Dominio dominio ,@PathVariable Long tipoAut) throws AuthenticationException, Exception {
@@ -97,59 +101,71 @@ public class LoginController {
 		String[] part;
 		Decoder decoder = new Decoder();
 		part = decoder.decode(header, AUTHENTICATION_PREFIX);
-		// DEBE DE RECIBIR LA MATRICULA Y EL DOMINIO COMO REQUESTPARAM O PATH VARIABLE
-
-		final Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(part[0], part[1]));
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		///////////////////
-//		final Usuario usuario = loginusuarioservice.findOne(part[0]);
-//		if (usuario.getActivo() == 0) {
-//			response.setStatus(401);
-//			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-//		}
-		Map<String,Object> empleado = empleadoEdao.findEmpleadoByMatricula(part[0]);
-		if(empleado.isEmpty()) {
-			response.setStatus(401);
-			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-		}
-		String nombreApellido = empleado.get("nombre").toString();
-		String[] nombrelista = nombreApellido.split(" ");
-		//Usuario usuarioActual = usuarioDao.findByMatricula(empleado.get("matricula").toString());
-		// COMO PASAR EL DOMINIO, OBJETO DOMINIO?
-		// AGREGAR A SERVICIO CREARSESION
-		Dominio dominioBD = dominioDao.findById(dominio.getDominioId()).orElse(null);
-		Iterable<Map<String,Object>> grupos = grupoRedEdao.listarGruposAD(dominioBD.getUrl(), dominioBD.getBaseDn(), null, null, "uid="+nombrelista[0], part[1]);
-//		if(grupos==null) {
-//			response.setStatus(401);
-//			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-//		}
-		Perfil perfilEncontrado = new Perfil();
-		for(Map<String,Object> grupo : grupos) {
-			int i=0;
-			String grupoEncontrado = grupo.get("grupos").toString();
-			String[] grupolista=grupoEncontrado.split(",");
-			perfilEncontrado = perfilDao.findPerfilByNombreGrupoRed(grupolista[i]);
-			if(perfilEncontrado==null) {
+		String token = "";
+		String rt = "";
+		
+		if(dominio==null && tipoAut==REGULAR) {
+			
+			Map<String,Object> empleadoRegular = new HashMap<>();
+			final Authentication authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(part[0], part[1]));
+			SecurityContextHolder.getContext().setAuthentication(authentication);		
+			final Usuario usuario = loginusuarioservice.findOne(part[0]);
+			if (usuario.getActivo() == 0) {
 				response.setStatus(401);
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-			}else {
-				break;
 			}
+			int perfilId = perfilservice.ObtenerPerfilID(usuario.getIdUsuario());
+			String perfilNombre = perfilservice.ObtenerPerfil(usuario.getIdUsuario());
+			empleadoRegular.put("idperfil", perfilId);
+			empleadoRegular.put("perfil", perfilNombre);
+			empleadoRegular.put("matricula", usuario.getMatricula());
+			empleadoRegular.put("id", usuario.getIdUsuario());
+			empleadoRegular.put("nombres", usuario.getNombre());
+			sesionActual = sesionservice.CrearSesion(usuario.getMatricula(),tipoAut);		
+			token = jwtTokenUtil.generateToken(empleadoRegular, sesionActual);
+			rt = jwtTokenUtil.refreshToken(token);
+			
+		}else {
+			
+			Map<String,Object> empleadoAD = empleadoEdao.findEmpleadoByMatricula(part[0]);
+			if(empleadoAD.isEmpty()) {
+				response.setStatus(401);
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+			Dominio dominioBD = dominioDao.findById(dominio.getDominioId()).orElse(null);
+			if(dominioBD==null) {
+				response.setStatus(401);
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+			Map<String, Object> grupoRed = grupoRedEdao.listarGruposAD(dominioBD.getUrl(), dominioBD.getBaseDn(), "", "", "uid="+part[0], part[1]);
+			if(grupoRed==null) {
+					response.setStatus(401);
+					return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+			Perfil perfilEncontrado = new Perfil();
+			String gruposred = grupoRed.get("grupos").toString();
+			String grupolst1 = gruposred.replace("[", "");
+			String grupolst2 = grupolst1.replace("]", "");
+			String[] grupos = grupolst2.split(",");
+			for(int i=0;i<grupos.length;i++) {
+				perfilEncontrado = perfilDao.findPerfilByNombreGrupoRed(grupos[i]);
+				if(perfilEncontrado==null) {
+					response.setStatus(401);
+					return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+				}else {
+					break;
+				}
+			}
+			empleadoAD.put("idperfil", perfilEncontrado.getIdPerfil());
+			empleadoAD.put("perfil", perfilEncontrado.getNombre());
+			sesionActual = sesionservice.CrearSesion(empleadoAD.get("matricula").toString(),tipoAut);
+			token = jwtTokenUtil.generateToken(empleadoAD, sesionActual);
+			rt = jwtTokenUtil.refreshToken(token);
 		}
-		empleado.put("idPerfil", perfilEncontrado.getIdPerfil());
-		empleado.put("perfil", perfilEncontrado.getNombre());
-		Long sesionactual = sesionservice.CrearSesion(empleado.get("matricula").toString(),tipoAut);
-		final String token = jwtTokenUtil.generateToken(empleado, sesionactual);
-		final String rt = jwtTokenUtil.refreshToken(token);
-		
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-	
 		params.add("token", token);
 		params.add("rt", rt);
-		
-		
 		UriComponents uriComponents = UriComponentsBuilder.newInstance()
 	            .scheme("http")
 	            .host(rutaIntranet)
@@ -157,13 +173,9 @@ public class LoginController {
 	            .queryParams(params).build(true);
 		
 		URI location = uriComponents.toUri();
-		
 		Map<String, String> respuesta = new HashMap<>();
-		
 		respuesta.put("ruta", location.toString());
-		
-//		response.sendRedirect(location.toString());
-//		response.setStatus(302);
+
 		
 		return new ResponseEntity<Map<String, String>>(respuesta, HttpStatus.OK);
 	}

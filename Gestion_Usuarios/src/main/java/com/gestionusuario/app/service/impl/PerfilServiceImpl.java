@@ -206,14 +206,14 @@ public class PerfilServiceImpl implements PerfilService{
 	@Override
 	public Perfil findPerfilByAD(Dominio dominio, String usuario, String password) throws ClientProtocolException, IOException, JSONException {
 		
-		Iterable<Map<String, Object>> gruposAD = grupoRedEdao.listarGruposAD(dominio.getUrl(), dominio.getBaseDn(), dominio.getManagerUsername(), dominio.getManagerPassword(), String.format(dominio.getFilterPattern(), usuario), password);
-		List<Map<String, Object>> gruposADList = StreamSupport.stream(gruposAD.spliterator(), false).collect(Collectors.toList());
-	    for (Map<String, Object> map : gruposADList) {
-			Perfil perfil = iPerfilDao.findPerfilByNombreGrupoRed(map.get("nombre").toString());
-			if (perfil != null) {
-				return perfil;
-			}
-		}
+		Map<String, Object> gruposAD = grupoRedEdao.listarGruposAD(dominio.getUrl(), dominio.getBaseDn(), dominio.getManagerUsername(), dominio.getManagerPassword(), String.format(dominio.getFilterPattern(), usuario), password);
+//		List<Map<String, Object>> gruposADList = StreamSupport.stream(gruposAD.spliterator(), false).collect(Collectors.toList());
+//	    for (Map<String, Object> map : gruposADList) {
+//			Perfil perfil = iPerfilDao.findPerfilByNombreGrupoRed(map.get("nombre").toString());
+//			if (perfil != null) {
+//				return perfil;
+//			}
+//		}
 	    return null;
  	}
 

@@ -16,6 +16,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -32,8 +33,8 @@ public class GrupoRedEdao {
 	@Autowired
 	private Requester requester;
 	
-	public Iterable<Map<String, Object>> listarGruposAD(String url, String baseDn, String managerUsername, String managerPassword, String filter, String password) throws ClientProtocolException, IOException, JSONException{
-		HttpPost post = new HttpPost(ldapPath);
+	public Map<String, Object> listarGruposAD(String url, String baseDn, String managerUsername, String managerPassword, String filter, String password) throws ClientProtocolException, IOException, JSONException{
+		HttpPost post = new HttpPost(ldapPath+"/ldap");
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();		
 		params.add(new BasicNameValuePair("url", url));
@@ -46,8 +47,8 @@ public class GrupoRedEdao {
 		CloseableHttpResponse httpResponse = requester.request(post);
 		if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 			String response = EntityUtils.toString(httpResponse.getEntity());
-			JSONArray responseJson = new JSONArray(response);		
-			return CommonUtils.jsonArrayToMap(responseJson);
+			JSONObject responseJson = new JSONObject(response);		
+			return CommonUtils.jsonToMap(responseJson);
 		}else {
 			return null;
 		}
