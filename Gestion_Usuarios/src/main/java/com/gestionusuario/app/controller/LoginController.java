@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -96,6 +97,7 @@ public class LoginController {
 	
 	//@RequestMapping(value = "/token", method = RequestMethod.POST)
 	@PostMapping("/token/{tipoAut}")
+	@Transactional
 	public ResponseEntity<?> register(HttpServletRequest header,  HttpServletResponse response,@RequestBody(required=false) Dominio dominio ,@PathVariable Long tipoAut) throws AuthenticationException, Exception {
 
 		String[] part;

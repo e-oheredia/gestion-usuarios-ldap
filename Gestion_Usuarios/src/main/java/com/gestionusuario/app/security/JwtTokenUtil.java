@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
+import javax.transaction.Transactional;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -96,7 +99,7 @@ public class JwtTokenUtil implements Serializable{
     }
     
     
-    // Crea el token de acceso en el login 
+    // Crea el token de acceso en el login
     private String tokenacceso(Map<String,Object> empleado, Long idsession) throws Exception {
     	Long perfilId = Long.valueOf(empleado.get("idperfil").toString());
     	String permisosID = perfilservice.findPermisosPorPerfilId(perfilId);
