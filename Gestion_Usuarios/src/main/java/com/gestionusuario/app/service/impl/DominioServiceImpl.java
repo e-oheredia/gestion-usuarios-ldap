@@ -1,5 +1,7 @@
 package com.gestionusuario.app.service.impl;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +16,13 @@ public class DominioServiceImpl implements DominioService {
 	IDominioDao dominioDao;
 
 	@Override
+	@Transactional
 	public Iterable<Dominio> listarActivos() {
 		return dominioDao.findByActivoTrue();
 	}
 
 	@Override
+	@Transactional
 	public Dominio listarById(Long id) {
 		return dominioDao.findById(id).orElse(null);
 	}

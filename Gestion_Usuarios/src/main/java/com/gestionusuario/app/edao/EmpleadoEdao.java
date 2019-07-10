@@ -3,6 +3,8 @@ package com.gestionusuario.app.edao;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -30,6 +32,7 @@ public class EmpleadoEdao implements IEmpleadoEdao{
 	private Requester requester;
 	
 	@Override
+	@Transactional
 	public Map<String, Object> findEmpleadoByMatricula(String matricula) throws ClientProtocolException, IOException, JSONException {
 		HttpGet httpGet = new HttpGet(empleadosPath + path + "?matricula=" + matricula);
 		CloseableHttpResponse httpResponse = requester.request(httpGet);

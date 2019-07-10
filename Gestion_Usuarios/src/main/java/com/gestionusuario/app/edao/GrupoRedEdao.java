@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -33,6 +35,7 @@ public class GrupoRedEdao {
 	@Autowired
 	private Requester requester;
 	
+	@Transactional
 	public Map<String, Object> listarGruposAD(String url, String baseDn, String managerUsername, String managerPassword, String filter, String password) throws ClientProtocolException, IOException, JSONException{
 		HttpPost post = new HttpPost(ldapPath+"/ldap");
 		
@@ -45,12 +48,16 @@ public class GrupoRedEdao {
 		params.add(new BasicNameValuePair("password", password));
 		post.setEntity(new UrlEncodedFormEntity(params));
 		CloseableHttpResponse httpResponse = requester.request(post);
-		if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-			String response = EntityUtils.toString(httpResponse.getEntity());
-			JSONObject responseJson = new JSONObject(response);		
-			return CommonUtils.jsonToMap(responseJson);
-		}else {
-			return null;
+		try {
+			if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				String response = EntityUtils.toString(httpResponse.getEntity());
+				JSONObject responseJson = new JSONObject(response);		
+				return CommonUtils.jsonToMap(responseJson);
+			}else {
+				return null;
+			}
+		} finally {
+			httpResponse.close();
 		}
 		
 	}
