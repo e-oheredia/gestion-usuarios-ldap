@@ -84,6 +84,11 @@ INSERT [dbo].[dominio] ([nombre], [url], [base_dn],[manager_username],[manager_p
 INSERT [dbo].[tipo_autenticacion] ([nombre], [descripcion]) VALUES ('AUTENTICACION BASICA','INGRESO CON USUARIO Y CONTRASEÑA')
 INSERT [dbo].[tipo_autenticacion] ([nombre], [descripcion]) VALUES ('ACTIVE DIRECTORY', 'INGRESO CON DOMINIO')
 
-INSERT [dbo].[grupo_red] ([nombre],[perfil_id]) VALUES ('AGENTE DE SEGURIDAD',5)
-INSERT [dbo].[grupo_red] ([nombre],[perfil_id]) VALUES ('AGENCIA LIMA',5)
-INSERT [dbo].[grupo_red] ([nombre],[perfil_id]) VALUES ('SUPERVISOR LIMA',3)
+INSERT [dbo].[grupo_red] ([grupo_red_id],[nombre],[perfil_id]) VALUES (1,'OPERATIVO UTD',3)
+INSERT [dbo].[grupo_red] ([grupo_red_id],[nombre],[perfil_id]) VALUES (2,'USUARIO REGULAR',5)
+INSERT [dbo].[grupo_red] ([grupo_red_id],[nombre],[perfil_id]) VALUES (3,'USUARIO BLOQUE',7)
+INSERT [dbo].[grupo_red] ([grupo_red_id],[nombre],[perfil_id]) VALUES (4,'GESTION DOCUMENTAL',6)
+INSERT [dbo].[grupo_red] ([grupo_red_id],[nombre],[perfil_id]) VALUES (5,'SUPERVISOR UTD',2)
+
+
+

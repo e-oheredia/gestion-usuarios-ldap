@@ -98,8 +98,8 @@ public class JwtTokenUtil implements Serializable{
     
     // Crea el token de acceso en el login 
     private String tokenacceso(Map<String,Object> empleado, Long idsession) throws Exception {
-    	
-    	String permisosID = perfilservice.findPermisosPorPerfilId(Long.valueOf(empleado.get("idPerfil").toString()));
+    	Long perfilId = Long.valueOf(empleado.get("idperfil").toString());
+    	String permisosID = perfilservice.findPermisosPorPerfilId(perfilId);
     	List<Map<String, Object>> permisosNombre = new ArrayList<Map<String, Object>>();
         String[] permisosIDarray = permisosID.split(",");
         int[] intpermisosID = new int[permisosIDarray.length];
@@ -116,12 +116,12 @@ public class JwtTokenUtil implements Serializable{
         }
         String jsonPermisos = new ObjectMapper().writeValueAsString(permisosNombre);
         Claims claims = Jwts.claims().setSubject(String.valueOf(empleado.get("id")));
-        claims.put("idperfil", empleado.get("idPerfil")); //CAMBIA
+        claims.put("idperfil", empleado.get("idperfil")); //CAMBIA
         claims.put("perfil", empleado.get("perfil").toString()); //CAMBIA
         claims.put("permisos", jsonPermisos);
         claims.put("matricula", empleado.get("matricula").toString());// REEMPLAZAR CON EL FRONT usuario.getMatricula x matricula 
-        claims.put("idUsuario", empleado.get("nombres").toString());
-        claims.put("usuario", empleado.get("id"));
+        claims.put("idUsuario", empleado.get("id").toString());
+        claims.put("usuario", empleado.get("nombres"));
         claims.put("idSesion", idsession);
         
         return Jwts.builder()
