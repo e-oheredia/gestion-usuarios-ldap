@@ -14,6 +14,7 @@ insert into permisos (nombre, descripcion) values ('ROLE_UTD','GESTIONA DOCUMENT
 insert into permisos (nombre, descripcion) values ('ROLE_SUPERVISOR','SUPERVISA LAS OPERACIONES DE UTD')
 insert into permisos (nombre, descripcion) values ('ROLE_AUTORIZADOR','AUTORIZA ENVIO DE DOCUMENTOS')
 insert into permisos (nombre, descripcion) values ('ROLE_USUARIO_BLOQUE','USUARIO BLOQUE')
+insert into permisos (nombre, descripcion) values ('ROLE_PROVEEDOR','PROVEEDOR')
 
 
 --debe estar por defecto activo a '1'11
@@ -24,6 +25,7 @@ insert into perfiles values (1,'ES EL ENCARGADO DE GUARDAR TARJETAS DE CREDITO',
 insert into perfiles values (1,'CREA DOCUMENTOS DE ENVIO REGULAR',GETDATE(),'USUARIO_REGULAR')
 insert into perfiles values (1,'CONTROLA DOCUMENTOS',GETDATE(),'GESTION DOCUMENTAL')
 insert into perfiles values (1,'CREA DOCUMENTOS DE ENVIO BLOQUE',GETDATE(),'USUARIO_BLOQUE')
+insert into perfiles values (1,'PROCESAR LAS GUIAS ENVIADAS',GETDATE(),'USUARIO_PROVEEDOR')
 
 --debe estar por defecto activo a '1'
 --
@@ -39,6 +41,7 @@ insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username
 insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username, password) values (1,'GIOVANNA','VEGA',12354677,'GVEGA','rsantos@exact.com.pe','gvega','$2a$04$95zHAMbf4jybXzbVSg0Xu.T1uEX.pgNpTNw1l539ntc4laRLvynYO')
 insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username, password) values (1,'AMANDA','GOMEZ',12954627,'AGOMEZ','agomez@exact.com.pe','agomez','$2a$04$95zHAMbf4jybXzbVSg0Xu.T1uEX.pgNpTNw1l539ntc4laRLvynYO')
 insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username, password) values (1,'KELLY','SALAZAR',82954621,'KSALAZAR','ksalazar@exact.com.pe','ksalazar','$2a$04$95zHAMbf4jybXzbVSg0Xu.T1uEX.pgNpTNw1l539ntc4laRLvynYO')
+insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username, password) values (1,'PROVEEDOR','PROVEEDOR1',82984621,'PROVEEDOR','proveedor@exact.com.pe','proveedor','$2a$04$95zHAMbf4jybXzbVSg0Xu.T1uEX.pgNpTNw1l539ntc4laRLvynYO')
 
 
 
@@ -62,6 +65,7 @@ insert into perfiles_permisos values (5,12)
 insert into perfiles_permisos values (2,14)
 insert into perfiles_permisos values (6,15)
 insert into perfiles_permisos values (7,16)
+insert into perfiles_permisos values (8,17)
 
 insert into usuario_perfil values (1,GETDATE(),'',3,1)
 insert into usuario_perfil values (1,GETDATE(),'',3,2)
@@ -75,6 +79,7 @@ insert into usuario_perfil values (1,GETDATE(),'',2,9)
 insert into usuario_perfil values (1,GETDATE(),'',6,10)
 insert into usuario_perfil values (1,GETDATE(),'',7,11)
 insert into usuario_perfil values (1,GETDATE(),'',7,12)
+insert into usuario_perfil values (1,GETDATE(),'',8,13)
 
 
 
