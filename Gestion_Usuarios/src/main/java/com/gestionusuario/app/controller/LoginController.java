@@ -113,6 +113,7 @@ public class LoginController {
 					.authenticate(new UsernamePasswordAuthenticationToken(part[0], part[1]));
 			SecurityContextHolder.getContext().setAuthentication(authentication);		
 			final Usuario usuario = loginusuarioservice.findOne(part[0]);
+			
 			if (usuario.getActivo() == 0) {
 				response.setStatus(401);
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -135,7 +136,9 @@ public class LoginController {
 				response.setStatus(401);
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
+			
 			Dominio dominioBD = dominioDao.findById(dominio.getDominioId()).orElse(null);
+			
 			if(dominioBD==null) {
 				response.setStatus(401);
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);

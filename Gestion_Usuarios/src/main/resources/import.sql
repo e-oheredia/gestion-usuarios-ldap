@@ -37,7 +37,7 @@ insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username
 insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username, password) values (1,'KATHELEEN','MACEDO',23434322,'KMACEDO','kmacedo@exact.com.pe','kmacedo','$2a$04$95zHAMbf4jybXzbVSg0Xu.T1uEX.pgNpTNw1l539ntc4laRLvynYO')
 insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username, password) values (1,'KRYSTEL','ARRUE',53684524,'KARRUE','karrue@exact.com.pe','karrue','$2a$04$95zHAMbf4jybXzbVSg0Xu.T1uEX.pgNpTNw1l539ntc4laRLvynYO')
 insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username, password) values (1,'MEDALIT','CEVALLOS',95785632,'MCEVALLOS','mcevallos@exact.com.pe','mcevallos','$2a$04$95zHAMbf4jybXzbVSg0Xu.T1uEX.pgNpTNw1l539ntc4laRLvynYO')
-insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username, password) values (1,'ERNST','ROJAS',79461389,'EROJAS','ccampos@exact.com.pe','erojas','$2a$04$95zHAMbf4jybXzbVSg0Xu.T1uEX.pgNpTNw1l539ntc4laRLvynYO')
+insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username, password) values (1,'ERNST','ROJAS',79461389,'EROJAS','ymamani@exact.com.pe','erojas','$2a$04$95zHAMbf4jybXzbVSg0Xu.T1uEX.pgNpTNw1l539ntc4laRLvynYO')
 insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username, password) values (1,'GIOVANNA','VEGA',12354677,'GVEGA','rsantos@exact.com.pe','gvega','$2a$04$95zHAMbf4jybXzbVSg0Xu.T1uEX.pgNpTNw1l539ntc4laRLvynYO')
 insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username, password) values (1,'AMANDA','GOMEZ',12954627,'AGOMEZ','agomez@exact.com.pe','agomez','$2a$04$95zHAMbf4jybXzbVSg0Xu.T1uEX.pgNpTNw1l539ntc4laRLvynYO')
 insert into usuarios (activo, nombre, apellido, dni, matricula, correo, username, password) values (1,'KELLY','SALAZAR',82954621,'KSALAZAR','ksalazar@exact.com.pe','ksalazar','$2a$04$95zHAMbf4jybXzbVSg0Xu.T1uEX.pgNpTNw1l539ntc4laRLvynYO')
@@ -84,7 +84,7 @@ insert into usuario_perfil values (1,GETDATE(),'',8,13)
 
 
 
-INSERT [dbo].[dominio] ([nombre], [url], [base_dn],[manager_username],[manager_password], [filter_pattern], [activo]) VALUES ('EXACT','ldap://localhost:8389','dc=springframework,dc=org','','','uid=%s',1)
+INSERT [dbo].[dominio] ([nombre], [url], [base_dn],[manager_username],[manager_password], [filter_pattern], [activo]) VALUES ('EXACT','ldap://localhost:8314','dc=springframework,dc=org','','','uid=%s',1)
 
 INSERT [dbo].[tipo_autenticacion] ([nombre], [descripcion]) VALUES ('AUTENTICACION BASICA','INGRESO CON USUARIO Y CONTRASEÑA')
 INSERT [dbo].[tipo_autenticacion] ([nombre], [descripcion]) VALUES ('ACTIVE DIRECTORY', 'INGRESO CON DOMINIO')
