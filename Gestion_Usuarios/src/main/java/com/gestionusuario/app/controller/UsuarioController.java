@@ -170,8 +170,9 @@ public class UsuarioController {
 							if ((usuarioDest.getNombre() != "") & (usuarioDest.getApellido() != "")
 									& (usuarioDest.getDni() != "") & (usuarioDest.getMatricula() != "")
 									& (usuarioDest.getCorreo() != "")) {
-								valor = this.getUsuarioservice().ValidarDatosExistentesAModificar(usuarioDest.getIdUsuario(),usuarioDest.getDni(),
-										usuarioDest.getCorreo(), usuarioDest.getMatricula());
+								valor = this.getUsuarioservice().ValidarDatosExistentesAModificar(
+										usuarioDest.getIdUsuario(), usuarioDest.getDni(), usuarioDest.getCorreo(),
+										usuarioDest.getMatricula());
 								switch (valor) {
 								case 1:
 									return "{\"RPTA\":\"EL DNI INGRESADO SE REPITE EN LA BASE DE DATOS\"}";
@@ -311,11 +312,10 @@ public class UsuarioController {
 		}
 		return "{\"RPTA\":\"EL USUARIO NO EXISTE EN LA BD\"}";
 	}
-	
+
 	@GetMapping("/{id}/nombre")
 	public ResponseEntity<String> obtenerNombreUsuario(@PathVariable Long id) throws Exception {
-		return new ResponseEntity<String>(usuarioservice.findNombreUsuario(id),HttpStatus.OK);
+		return new ResponseEntity<String>(usuarioservice.findNombreUsuario(id), HttpStatus.OK);
 	}
-	
 
 }
